@@ -14,7 +14,7 @@ module.exports = app => {
         res.send(resObject);
     })
 
-    app.post("/spreadsheet", function (request, response) {
+    app.post("/spreadsheet", async (request, response) => {
         const agent = new WebhookClient({ request: request, response: response });
 
         //MAPEAMENTO DAS INTENTS
@@ -27,11 +27,11 @@ module.exports = app => {
 
         //FUNÇÃO DE CADASTRO DE LEADS
 
-        function cadastro(agent) {
+        async function cadastro(agent) {
             const { nomeSala, resultado } = agent.parameters;
             const data = [{ NomeSala: nomeSala, Resultado: resultado }];
 
-            fetch(spreadsheetUrl, {
+            await fetch(spreadsheetUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,10 +48,10 @@ module.exports = app => {
 
         // PESQUISAR CLIENTE E EVENTOS
 
-        function pesquisa() {
+        async function pesquisa() {
             var Sala = request.body.queryResult.parameters["nomeSala"];
 
-            fetch(spreadsheetUrl)
+            await fetch(spreadsheetUrl)
                 .then(res => res.json())
                 .then(data => {
                     data.forEach(coluna => {
@@ -64,6 +64,7 @@ module.exports = app => {
                                     " Siga esses passos: " +
                                     coluna.Resultado
                             });
+                            console.log("res", response.json())
                         }
                     });
                 })
