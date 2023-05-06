@@ -1,6 +1,7 @@
 const chatbot = require('../chatbot/chatbot')
 const { WebhookClient } = require("dialogflow-fulfillment");
 const spreadsheetUrl = process.env.REACT_APP_SPREADSHEET_URL;
+const fetch = require("node-fetch");
 
 module.exports = app => {
     app.post('/text_query', async (req, res) => {
