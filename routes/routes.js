@@ -1,5 +1,6 @@
 const chatbot = require('../chatbot/chatbot')
 const { WebhookClient } = require("dialogflow-fulfillment");
+const spreadsheetUrl = process.env.REACT_APP_SPREADSHEET_URL;
 
 module.exports = app => {
     app.post('/text_query', async (req, res) => {
@@ -15,7 +16,7 @@ module.exports = app => {
         res.send(resObject);
     })
 
-    app.post("/teste", function (request, response) {
+    app.post("/spreadsheet", function (request, response) {
         const agent = new WebhookClient({ request: request, response: response });
 
         //MAPEAMENTO DAS INTENTS
@@ -32,7 +33,7 @@ module.exports = app => {
             const { nomeSala, resultado } = agent.parameters;
             const data = [{ NomeSala: nomeSala, Resultado: resultado }];
 
-            fetch("https://sheet.best/api/sheets/ec4edacc-4491-483c-af48-29e164f82199", {
+            fetch(spreadsheetUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,10 +50,10 @@ module.exports = app => {
 
         // PESQUISAR CLIENTE E EVENTOS
 
-        function pesquisa(agent) {
+        function pesquisa() {
             var Sala = request.body.queryResult.parameters["nomeSala"];
 
-            fetch("https://sheet.best/api/sheets/ec4edacc-4491-483c-af48-29e164f82199")
+            fetch(spreadsheetUrl)
                 .then(res => res.json())
                 .then(data => {
                     data.forEach(coluna => {
