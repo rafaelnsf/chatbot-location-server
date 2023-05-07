@@ -65,7 +65,6 @@ module.exports = app => {
                                     " Siga esses passos: " +
                                     coluna.Resultado
                             });
-                            console.log("res", response.json())
                         }
                     });
                 })
