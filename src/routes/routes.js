@@ -21,7 +21,7 @@ module.exports = app => {
         //MAPEAMENTO DAS INTENTS
 
         let intentMap = new Map();
-        intentMap.set('SALAS', pesquisa);
+        intentMap.set('Localizacoes', pesquisa);
         intentMap.set('teste', cadastro);
         agent.handleRequest(intentMap);
 
@@ -59,10 +59,6 @@ module.exports = app => {
                         if (coluna.Sala === Sala) {
                             response.json({
                                 fulfillmentText:
-                                    "Para chegar até a " +
-                                    "Sala: " +
-                                    coluna.NomeSala +
-                                    " Siga esses passos: " +
                                     coluna.Resultado
                             });
                         }
