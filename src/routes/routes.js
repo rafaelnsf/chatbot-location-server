@@ -53,10 +53,10 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa() {
+            console.log("######$%% request.body.queryResult", request.body.queryResult)
             let Sala = request.body.queryResult.parameters["nomeSala"];
             console.log("nomeSala", Sala);
             const imagens = [];
-
             await fetch(spreadsheetUrl)
                 .then(res => res.json())
                 .then(data => {
@@ -68,8 +68,6 @@ module.exports = app => {
                                 fulfillmentText:
                                     coluna.Resultado
                             });
-                            const imagens = [];
-
                             Object.keys(coluna).forEach(key => {
                                 if (key.startsWith("imagem") && coluna[key]) {
                                     imagens.push(coluna[key]);
