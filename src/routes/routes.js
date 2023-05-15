@@ -52,36 +52,32 @@ module.exports = app => {
 
         // PESQUISAR CLIENTE E EVENTOS
 
-        async function pesquisa() {
-            // console.log("######$%% request.body.queryResult", request.body.queryResult)
-            let Sala = request.body.queryResult.parameters["salas"];
-            // console.log("nomeSala", Sala);
-            const imagens = [];
-            await fetch(spreadsheetUrl)
-                .then(res => res.json())
-                .then(data => {
-                    // console.log("data full", data);
-                    data.forEach(coluna => {
-                        // console.log("colunas", coluna)
-                        if (coluna.Sala === Sala) {
-                            Object.keys(coluna).forEach(key => {
-                                if (key.startsWith("imagem") && coluna[key]) {
-                                    imagens.push(coluna[key]);
-                                }
-                            });
-                            // console.log("imagens: ", imagens);
-                            response.json({
-                                fulfillmentText:
-                                    coluna.Resultado,
-                                imagens:
-                                    imagens
-                            });
-                        }
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
+        async function pesquisa(request, response) {
+            try {
+                let Sala = request.body.queryResult.parameters["salas"];
+                const imagens = [];
+
+                const res = await fetch(spreadsheetUrl);
+                const data = await res.json();
+
+                data.forEach(coluna => {
+                    if (coluna.Sala === Sala) {
+                        Object.keys(coluna).forEach(key => {
+                            if (key.startsWith("imagem") && coluna[key]) {
+                                imagens.push(coluna[key]);
+                            }
+                        });
+
+                        response.json({
+                            fulfillmentText: coluna.Resultado,
+                            imagens: imagens
+                        });
+                    }
                 });
+            } catch (error) {
+                console.error('Error:', error);
+                response.json({ error: 'Ocorreu um erro durante a pesquisa.' });
+            }
         }
     });
     // app.post('/event_query', (req, res) => {

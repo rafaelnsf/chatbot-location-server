@@ -18,5 +18,5 @@ app.get('/', (req, res) => {
 require('./routes/routes')(app)
 
 app.listen(port, () => {
-    console.log("server is running");
+    console.log("server is running on port: ", port);
 })
