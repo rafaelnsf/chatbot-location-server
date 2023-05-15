@@ -16,8 +16,8 @@ module.exports = app => {
     })
 
     app.post("/spreadsheet", async (request, response) => {
-        console.log("request", request);
-        console.log("response", response);
+        console.log("######################################request", request);
+        console.log("##################################response", response);
         const agent = new WebhookClient({ request: request, response: response });
 
         //MAPEAMENTO DAS INTENTS
