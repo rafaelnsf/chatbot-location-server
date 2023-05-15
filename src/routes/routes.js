@@ -16,6 +16,8 @@ module.exports = app => {
     })
 
     app.post("/spreadsheet", async (request, response) => {
+        console.log("request", request);
+        console.log("response", response);
         const agent = new WebhookClient({ request: request, response: response });
 
         //MAPEAMENTO DAS INTENTS
@@ -30,6 +32,7 @@ module.exports = app => {
 
         async function cadastro(agent) {
             const { nomeSala, resultado } = agent.parameters;
+
             const data = [{ NomeSala: nomeSala, Resultado: resultado }];
 
             await fetch(spreadsheetUrl, {
@@ -50,17 +53,25 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa() {
-            var Sala = request.body.queryResult.parameters["nomeSala"];
+            let Sala = request.body.queryResult.parameters["nomeSala"];
+            const imagens = [];
 
             await fetch(spreadsheetUrl)
                 .then(res => res.json())
                 .then(data => {
+                    console.log("data full", data);
                     data.forEach(coluna => {
+                        console.log("colunas", coluna)
                         if (coluna.Sala === Sala) {
                             response.json({
                                 fulfillmentText:
                                     coluna.Resultado
                             });
+                            let i = 1;
+                            while (coluna[`imagem${i}`] !== undefined || coluna[`imagem${i}`] !== null) {
+                                imagens.push(coluna[`imagem${i}`]);
+                                i++;
+                            }
                         }
                     });
                 })
