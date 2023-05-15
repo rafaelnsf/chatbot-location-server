@@ -53,8 +53,10 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa(request, response) {
+            console.log("######################################request", request);
+            // console.log("##################################response", response);
             try {
-                let Sala = request.body.queryResult.parameters["salas"];
+                let Sala = request.body.queryResult?.parameters["salas"];
                 const imagens = [];
 
                 const res = await fetch(spreadsheetUrl);
