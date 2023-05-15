@@ -16,8 +16,8 @@ module.exports = app => {
     })
 
     app.post("/spreadsheet", async (request, response) => {
-        console.log("######################################request", request);
-        console.log("##################################response", response);
+        // console.log("######################################request", request);
+        // console.log("##################################response", response);
         const agent = new WebhookClient({ request: request, response: response });
 
         //MAPEAMENTO DAS INTENTS
@@ -53,27 +53,29 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa() {
-            console.log("######$%% request.body.queryResult", request.body.queryResult)
-            let Sala = request.body.queryResult.parameters["nomeSala"];
-            console.log("nomeSala", Sala);
+            // console.log("######$%% request.body.queryResult", request.body.queryResult)
+            let Sala = request.body.queryResult.parameters["salas"];
+            // console.log("nomeSala", Sala);
             const imagens = [];
             await fetch(spreadsheetUrl)
                 .then(res => res.json())
                 .then(data => {
-                    console.log("data full", data);
+                    // console.log("data full", data);
                     data.forEach(coluna => {
-                        console.log("colunas", coluna)
+                        // console.log("colunas", coluna)
                         if (coluna.Sala === Sala) {
-                            response.json({
-                                fulfillmentText:
-                                    coluna.Resultado
-                            });
                             Object.keys(coluna).forEach(key => {
                                 if (key.startsWith("imagem") && coluna[key]) {
                                     imagens.push(coluna[key]);
                                 }
                             });
-                            console.log("imagens: ", imagens);
+                            // console.log("imagens: ", imagens);
+                            response.json({
+                                fulfillmentText:
+                                    coluna.Resultado,
+                                imagens:
+                                    imagens
+                            });
                         }
                     });
                 })
