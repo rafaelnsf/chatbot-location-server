@@ -54,6 +54,7 @@ module.exports = app => {
 
         async function pesquisa() {
             let Sala = request.body.queryResult.parameters["nomeSala"];
+            console.log("nomeSala", Sala);
             const imagens = [];
 
             await fetch(spreadsheetUrl)
@@ -67,11 +68,14 @@ module.exports = app => {
                                 fulfillmentText:
                                     coluna.Resultado
                             });
-                            let i = 1;
-                            while (coluna[`imagem${i}`] !== undefined || coluna[`imagem${i}`] !== null) {
-                                imagens.push(coluna[`imagem${i}`]);
-                                i++;
-                            }
+                            const imagens = [];
+
+                            Object.keys(coluna).forEach(key => {
+                                if (key.startsWith("imagem") && coluna[key]) {
+                                    imagens.push(coluna[key]);
+                                }
+                            });
+                            console.log("imagens: ", imagens);
                         }
                     });
                 })
