@@ -53,10 +53,10 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa(request, response) {
-            console.log("######################################request", request.body);
+            console.log("######################################request", request);
             // console.log("##################################response", response);
             try {
-                let Sala = request.body.parameters["salas"];
+                let Sala = request.parameters["salas"];
                 const imagens = [];
 
                 const res = await fetch(spreadsheetUrl);
