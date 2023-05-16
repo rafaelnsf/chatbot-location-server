@@ -54,9 +54,9 @@ module.exports = app => {
 
         async function pesquisa() {
             console.log("######################################request", request.body);
-            // console.log("##################################response", response);
+            console.log("##################################response", response);
             try {
-                var Sala = request.body.queryResult.parameters["nomeSala"];
+                var Sala = request.body.queryResult.parameters["salas"];
                 const imagens = [];
 
                 const res = await fetch(spreadsheetUrl);
@@ -72,10 +72,11 @@ module.exports = app => {
 
                         response.json({
                             fulfillmentText: coluna.Resultado,
-                            imagens: imagens
+                            imagens: "1213"
                         });
                     }
                 });
+                console.log("imagens: ", imagens)
             } catch (error) {
                 console.error('Error:', error);
                 response.json({ error: 'Ocorreu um erro durante a pesquisa.' });
