@@ -62,16 +62,16 @@ module.exports = app => {
 
         async function pesquisa() {
             try {
-                console.log("params body $#@#$#", request.body.queryResult.parameters)
-                let Sala = request.body.queryResult.parameters["sala"];
-                console.log("Sala", Sala)
-
+                console.log("params body $#@#$#", request.body.queryResult.parameters?.salas);
+                let Sala = request.body.queryResult.parameters["salas"];
+                console.log("Sala", Sala);
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
+                let result = null;
 
                 data.forEach(coluna => {
-                    console.log("coluna", coluna)
+                    console.log("coluna", coluna);
                     if (coluna.NomeSala === Sala) {
                         Object.keys(coluna).forEach(key => {
                             if (key.startsWith("imagem") && coluna[key]) {
@@ -79,11 +79,17 @@ module.exports = app => {
                             }
                         });
 
-                        response.json({
-                            fulfillmentText: coluna.Resultado,
-                        });
+                        result = {
+                            fulfillmentText: coluna.Resultado
+                        };
                     }
                 });
+
+                if (result) {
+                    response.json(result);
+                } else {
+                    response.json({ fulfillmentText: 'Nenhum resultado encontrado.' });
+                }
             } catch (error) {
                 console.error('Error:', error);
                 response.json({ error: 'Ocorreu um erro durante a pesquisa.' });
