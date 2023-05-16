@@ -6,24 +6,26 @@ const fetch = require("node-fetch");
 module.exports = app => {
     let images = [];
     app.post('/text_query', async (req, res) => {
-        console.log("imagens: ", images)
         const { text, userId } = req.body;
         const resultQuery = await chatbot.textQuery(text, userId)
-        console.log("resultquery ###############$$$$$$", resultQuery);
         const resObject = {
             intentName: resultQuery.intent.displayName,
             userQuery: resultQuery.queryText,
             fulfillmentText: resultQuery.fulfillmentText
         }
+        // Se tiver imagem, inclui no objeto de retorno
         if (images.length > 0) {
             resObject.images = images;
         }
         res.send(resObject);
+
+        //Apos o envio zera novamente o array
+        if (images.length > 0) {
+            images = [];
+        }
     })
 
     app.post("/spreadsheet", async (request, response) => {
-        // console.log("######################################request", request);
-        // console.log("##################################response", response);
         const agent = new WebhookClient({ request: request, response: response });
 
         //MAPEAMENTO DAS INTENTS
@@ -59,17 +61,12 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa() {
-            // console.log("######################################request", request.body);
-            // console.log("##################################response", response);
             try {
                 var Sala = request.body.queryResult.parameters["nomeSala"];
 
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
-                if (images.length > 0) {
-                    images = [];
-                }
 
                 data.forEach(coluna => {
                     if (coluna.Sala === Sala) {
