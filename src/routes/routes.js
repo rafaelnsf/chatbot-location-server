@@ -62,16 +62,13 @@ module.exports = app => {
 
         async function pesquisa() {
             try {
-                console.log("params body $#@#$#", request.body.queryResult.parameters?.salas);
                 let Sala = request.body.queryResult.parameters["salas"];
-                console.log("Sala", Sala);
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
                 let result = null;
 
                 data.forEach(coluna => {
-                    console.log("coluna", coluna);
                     if (coluna.NomeSala === Sala) {
                         Object.keys(coluna).forEach(key => {
                             if (key.startsWith("imagem") && coluna[key]) {
