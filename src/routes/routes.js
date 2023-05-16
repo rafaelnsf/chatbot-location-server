@@ -6,7 +6,7 @@ const fetch = require("node-fetch");
 module.exports = app => {
     const images = [];
     app.post('/text_query', async (req, res) => {
-        console.log("imagens: ", imagens)
+        console.log("imagens: ", images)
         const { text, userId } = req.body;
         const resultQuery = await chatbot.textQuery(text, userId)
         console.log("resultquery ###############$$$$$$", resultQuery);
