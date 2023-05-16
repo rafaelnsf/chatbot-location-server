@@ -4,14 +4,17 @@ const spreadsheetUrl = process.env.REACT_APP_SPREADSHEET_URL;
 const fetch = require("node-fetch");
 
 module.exports = app => {
+    const images = [];
     app.post('/text_query', async (req, res) => {
+        console.log("imagens: ", imagens)
         const { text, userId } = req.body;
         const resultQuery = await chatbot.textQuery(text, userId)
         console.log("resultquery ###############$$$$$$", resultQuery);
         const resObject = {
             intentName: resultQuery.intent.displayName,
             userQuery: resultQuery.queryText,
-            fulfillmentText: resultQuery.fulfillmentText
+            fulfillmentText: resultQuery.fulfillmentText,
+            images: images
         }
         res.send(resObject);
     })
@@ -58,10 +61,11 @@ module.exports = app => {
             // console.log("##################################response", response);
             try {
                 var Sala = request.body.queryResult.parameters["nomeSala"];
-                const imagens = [];
+
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
+                images = [];
 
                 data.forEach(coluna => {
                     if (coluna.Sala === Sala) {
@@ -73,11 +77,9 @@ module.exports = app => {
 
                         response.json({
                             fulfillmentText: coluna.Resultado,
-                            imagens: "1213"
                         });
                     }
                 });
-                console.log("imagens: ", imagens)
             } catch (error) {
                 console.error('Error:', error);
                 response.json({ error: 'Ocorreu um erro durante a pesquisa.' });
