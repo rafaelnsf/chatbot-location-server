@@ -4,7 +4,7 @@ const spreadsheetUrl = process.env.REACT_APP_SPREADSHEET_URL;
 const fetch = require("node-fetch");
 
 module.exports = app => {
-    const images = [];
+    let images = [];
     app.post('/text_query', async (req, res) => {
         console.log("imagens: ", images)
         const { text, userId } = req.body;
@@ -13,8 +13,10 @@ module.exports = app => {
         const resObject = {
             intentName: resultQuery.intent.displayName,
             userQuery: resultQuery.queryText,
-            fulfillmentText: resultQuery.fulfillmentText,
-            images: images
+            fulfillmentText: resultQuery.fulfillmentText
+        }
+        if (images.length > 0) {
+            resObject.images = images;
         }
         res.send(resObject);
     })
@@ -65,7 +67,9 @@ module.exports = app => {
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
-                images = [];
+                if (images.length > 0) {
+                    images = [];
+                }
 
                 data.forEach(coluna => {
                     if (coluna.Sala === Sala) {
