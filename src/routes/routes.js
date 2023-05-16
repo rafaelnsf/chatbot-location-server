@@ -71,7 +71,7 @@ module.exports = app => {
                     if (coluna.Sala === Sala) {
                         Object.keys(coluna).forEach(key => {
                             if (key.startsWith("imagem") && coluna[key]) {
-                                imagens.push(coluna[key]);
+                                images.push(coluna[key]);
                             }
                         });
 
