@@ -7,6 +7,7 @@ module.exports = app => {
     app.post('/text_query', async (req, res) => {
         const { text, userId } = req.body;
         const resultQuery = await chatbot.textQuery(text, userId)
+        console.log("resultquery ###############$$$$$$", resultQuery);
         const resObject = {
             intentName: resultQuery.intent.displayName,
             userQuery: resultQuery.queryText,
@@ -53,10 +54,10 @@ module.exports = app => {
         // PESQUISAR CLIENTE E EVENTOS
 
         async function pesquisa() {
-            console.log("######################################request", request.body);
-            console.log("##################################response", response);
+            // console.log("######################################request", request.body);
+            // console.log("##################################response", response);
             try {
-                var Sala = request.body.queryResult.parameters["salas"];
+                var Sala = request.body.queryResult.parameters["nomeSala"];
                 const imagens = [];
 
                 const res = await fetch(spreadsheetUrl);
