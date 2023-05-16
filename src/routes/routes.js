@@ -62,7 +62,8 @@ module.exports = app => {
 
         async function pesquisa() {
             try {
-                var Sala = request.body.queryResult.parameters["nomeSala"];
+                console.log("params body $#@#$#", request.body.queryResult.parameters)
+                let Sala = request.body.queryResult.parameters["sala"];
                 console.log("Sala", Sala)
 
 
@@ -71,7 +72,7 @@ module.exports = app => {
 
                 data.forEach(coluna => {
                     console.log("coluna", coluna)
-                    if (coluna.Sala === Sala) {
+                    if (coluna.NomeSala === Sala) {
                         Object.keys(coluna).forEach(key => {
                             if (key.startsWith("imagem") && coluna[key]) {
                                 images.push(coluna[key]);
