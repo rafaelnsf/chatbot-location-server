@@ -4,26 +4,33 @@ const spreadsheetUrl = process.env.REACT_APP_SPREADSHEET_URL;
 const fetch = require("node-fetch");
 
 module.exports = app => {
-    let images = [];
     app.post('/text_query', async (req, res) => {
         const { text, userId } = req.body;
-        const resultQuery = await chatbot.textQuery(text, userId)
+        const resultQuery = await chatbot.textQuery(text, userId);
+
+        const textArray = resultQuery.fulfillmentText.split('\n');
         const resObject = {
             intentName: resultQuery.intent.displayName,
             userQuery: resultQuery.queryText,
-            fulfillmentText: resultQuery.fulfillmentText
-        }
-        // Se tiver imagem, inclui no objeto de retorno
-        if (images.length > 0) {
-            resObject.images = images;
-        }
-        res.send(resObject);
+            fulfillmentText: []
+        };
 
-        //Apos o envio zera novamente o array
-        if (images.length > 0) {
-            images = [];
+        for (let line of textArray) {
+            if (isImageUrl(line)) {
+                resObject.fulfillmentText.push({ img: line });
+            } else {
+                resObject.fulfillmentText.push(line);
+            }
         }
-    })
+
+        res.send(resObject);
+    });
+
+    function isImageUrl(line) {
+        // Verifica se a linha contém uma URL de imagem
+        // Pode ser feita uma validação mais robusta conforme suas necessidades
+        return line.startsWith('https://drive.google.com/file/');
+    }
 
     app.post("/spreadsheet", async (request, response) => {
         const agent = new WebhookClient({ request: request, response: response });
@@ -70,12 +77,6 @@ module.exports = app => {
 
                 data.forEach(coluna => {
                     if (coluna.NomeSala === Sala) {
-                        Object.keys(coluna).forEach(key => {
-                            if (key.startsWith("imagem") && coluna[key]) {
-                                images.push(coluna[key]);
-                            }
-                        });
-
                         result = {
                             fulfillmentText: coluna.Resultado
                         };
