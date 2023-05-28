@@ -83,9 +83,9 @@ module.exports = app => {
                 data.forEach(coluna => {
                     console.log("Coluna NomeSala:", coluna.NomeSala);
                     console.log("Coluna NomeSala tipo:", typeof coluna.NomeSala);
-                    if (coluna.NomeSala === Sala) {
+                    if (coluna.NomeSala.toString() === Sala) {
                         result = {
-                            fulfillmentText: coluna.Resultado
+                            fulfillmentText: coluna.Resultado.toString()
                         };
                         console.log("result: ", typeof result)
                     }
