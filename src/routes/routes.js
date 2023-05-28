@@ -70,9 +70,12 @@ module.exports = app => {
         async function pesquisa() {
             try {
                 let Sala = request.body.queryResult.parameters["salas"];
+                console.log("Sala: ", Sala);
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
+
+                console.log("data: ", data);
                 let result = null;
 
                 data.forEach(coluna => {
@@ -80,6 +83,7 @@ module.exports = app => {
                         result = {
                             fulfillmentText: coluna.Resultado
                         };
+                        console.log("result: ", result)
                     }
                 });
 
