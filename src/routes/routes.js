@@ -71,19 +71,23 @@ module.exports = app => {
             try {
                 let Sala = request.body.queryResult.parameters["salas"];
                 console.log("Sala: ", Sala);
+                console.log("Sala tipo: ", typeof data);
 
                 const res = await fetch(spreadsheetUrl);
                 const data = await res.json();
 
                 console.log("data: ", data);
+                console.log("data tipo: ", typeof data);
                 let result = null;
 
                 data.forEach(coluna => {
+                    console.log("Coluna NomeSala:", coluna.NomeSala);
+                    console.log("Coluna NomeSala tipo:", typeof coluna.NomeSala);
                     if (coluna.NomeSala === Sala) {
                         result = {
                             fulfillmentText: coluna.Resultado
                         };
-                        console.log("result: ", result)
+                        console.log("result: ", typeof result)
                     }
                 });
 
