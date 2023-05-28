@@ -87,7 +87,7 @@ module.exports = app => {
                         result = {
                             fulfillmentText: coluna.Resultado.toString()
                         };
-                        console.log("result: ", typeof result)
+                        console.log("result: ", result)
                     }
                 });
 
